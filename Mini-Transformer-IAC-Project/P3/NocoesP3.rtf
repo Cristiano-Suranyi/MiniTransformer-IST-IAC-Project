@@ -1,0 +1,276 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2870
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica-Bold;\f1\fswiss\fcharset0 Helvetica;\f2\froman\fcharset0 Times-Bold;
+\f3\froman\fcharset0 Times-Roman;\f4\fmodern\fcharset0 Courier;\f5\froman\fcharset0 Times-Italic;
+\f6\fswiss\fcharset0 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww25040\viewh24120\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\b\fs24 \cf0 Constru\'e7\'e3o das instru\'e7\'f5es (16 bits):
+\f1\b0 \
+\
+\'97 registos \'97> 3 bits, pois precisamos de 8 registos e 2^3=8;\
+\'97 opcode \'97> 2 bits, pois precisamos de 4 instru\'e7\'f5es e 2^2=4;\
+\
+\
+\
+Constru\'e7\'e3o li:\
+\
+\'97 exemplo \'97> li rd, imediato\
+\
+\'97 formato \'97> imediato | rd | opcode\
+\
+\'97 opcode \'97> 2 bits = 00\
+\'97 registo de destino \'97> 3 bits\
+\'97 imediato \'97> 11 bits (16 \'97 (2 + 3))\
+\
+Constru\'e7\'e3o add:\
+\
+\'97 exemplo \'97> add rd, rs1\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \'97 formato \'97> bits a zero | rs1 | rd | opcode\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\'97 opcode \'97> 2 bits = 01\
+\'97 registo de destino \'97> 3 bits\
+\'97 registo de origem \'97> 3 bits\
+\'97 mais 8 bits a zero (16 \'97 8)\
+\
+Constru\'e7\'e3o dot:\
+\
+\'97 exemplo \'97> dot rd, rs1\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \'97 formato \'97> bits a zero | rs1 | rd | opcode\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\'97 opcode \'97> 2 bits = 10\
+\'97 registo de destino \'97> 3 bits\
+\'97 registo de origem \'97> 3 bits\
+\'97 mais 8 bits a zero (16 \'97\'a08)\
+\
+Constru\'e7\'e3o dota:\
+\
+\'97 exemplo \'97> dota rd, rs1, rs2\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \'97 formato \'97> bits a zero | rs2 | rs1 | rd | opcode\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\'97 opcode \'97> 2 bits = 11\
+\'97 registo de destino \'97> 3 bits\
+\'97 registo de origem 1 \'97> 3 bits\
+\'97 registo de origem 2 \'97> 3 bits\
+\'97 mais 5 bits a zero (16 \'97 11)\
+\
+\
+
+\f0\b Constru\'e7\'e3o Banco de Registos:
+\f1\b0 \
+\
+\'97 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 4 Portas de leitura independentes
+\f3\b0  (as instru\'e7\'f5es 
+\f4\fs26 dot
+\f3\fs24  e 
+\f4\fs26 dota 
+\f3\fs24  usam 4 sa\'eddas simult\'e2neas para ler os componentes dos vetores).
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97 1 porta de escrita (apenas \'e9 preciso escrever o registo de destino)\
+\
+Mapeamento dos Sinais no Logisism:\
+\
+\'97 Entradas de Sele\'e7\'e3o:\
+\
+\'97> 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Read Register 1 (3 bits):
+\f3\b0  Recebe 
+\f4\fs26 rd
+\f3\fs24  (no 
+\f4\fs26 add
+\f3\fs24 /
+\f4\fs26 dot
+\f3\fs24 ) ou 
+\f4\fs26 rs1
+\f3\fs24  (no 
+\f4\fs26 dota
+\f3\fs24 ).
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97> 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Read Register 2 (3 bits):
+\f3\b0  Recebe 
+\f4\fs26 rs1
+\f3\fs24  (no 
+\f4\fs26 add
+\f3\fs24 /
+\f4\fs26 dot
+\f3\fs24 ) ou 
+\f4\fs26 rs2
+\f3\fs24  (no 
+\f4\fs26 dota
+\f3\fs24 ).
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97> 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Write Register (3 bits):
+\f3\b0  Identifica onde escrever o resultado final (
+\f4\fs26 rd
+\f3\fs24 ).
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\
+\'97 Entradas de Dados e Controlo:\
+\
+\'97> Write Data (16 bits) \'97 O valor recebido da ALU para ser guardado\
+\'97> RegWrite (1 bit) \'97 Sinal de Controlo que d\'e1 permiss\'e3o para guardar\
+\'97> Clock (1 bit) \'97 O Sinal de Rel\'f3gio do Sistema para sincronizar a escrita\
+\
+\'97 Sa\'eddas de Dados:\
+\
+\'97> 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Read Data 1:
+\f3\b0  Valor do registo selecionado por 
+\f5\i \strokec2 Read Register 1
+\f3\i0 \strokec2 .
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97> 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Read Data 2:
+\f3\b0  Valor do registo selecionado por 
+\f5\i \strokec2 Read Register 2
+\f3\i0 \strokec2 .
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97> 
+\f0\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Read Data 3 (Consecutivo 1):
+\f3\b0 \strokec2  Valor do registo par + 1 calculado pelo Somador 1 (
+\f6\i \strokec2 Read Register 1 + 1
+\f3\i0 \strokec2 ).
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97> 
+\f0\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Read Data 4 (Consecutivo 2):
+\f3\b0 \strokec2  Valor do registo par + 1 calculado pelo Somador 2 (
+\f6\i \strokec2 Read Register 2 + 1
+\f3\i0 \strokec2 ).
+\f6\i \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\
+
+\f1\i0 \'97 Componentes do Banco de Registos:\
+\
+(Leitura de dados)\
+\
+\'97> 
+\f3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 8 Registos individuais de 16 bits (R0 a R7)
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97> 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 4 Multiplexadores principais de 8 para 1 (16 bits de largura):
+\f3\b0  Para gerar as 4 sa\'eddas de dados em simult\'e2neo
+\f1 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\'97> 
+\f0\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 2 Somadores de 3 bits:
+\f3\b0 \strokec2  Para calcular automaticamente os registos consecutivos (
+\f1 \strokec2 $+1$
+\f3 \strokec2 ) para as portas de leitura 3 e 4.\
+\'97> 
+\f2\b 2 Multiplexadores de Endere\'e7o (2 para 1, de 3 bits):
+\f3\b0  Colocados antes das entradas do Banco de Registos para alternar entre os campos da instru\'e7\'e3o (
+\f4\fs26 rd
+\f3\fs24 /
+\f4\fs26 rs1
+\f3\fs24  e 
+\f4\fs26 rs1
+\f3\fs24 /
+\f4\fs26 rs2
+\f3\fs24 ).\
+\
+\'97 Encaminhamento para a ALU (Multiplexadores de Argumentos)\
+\
+\'97> 
+\f2\b 2 Multiplexadores de Dados (2 para 1, de 16 bits):
+\f3\b0  Colocados entre o Banco de Registos e a ALU para garantir que o bloco de produto escalar recebe os argumentos certos (trocando 
+\f4\fs26 R[rd]
+\f3\fs24  por 
+\f4\fs26 R[rs1]
+\f3\fs24  quando a instru\'e7\'e3o \'e9 
+\f4\fs26 dota
+\f3\fs24 ).\
+\'97> 
+\f2\b 1 Desvio (Bypass) de 16 bits:
+\f3\b0  Leva o valor de 
+\f4\fs26 R[rd]
+\f3\fs24  diretamente para o somador acumulador no final da ALU durante o 
+\f4\fs26 dota\
+
+\f1\fs24 \kerning1\expnd0\expndtw0 \outl0\strokewidth0 \
+\
+(Escrita de dados)\
+\
+\'97> 
+\f2\b \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 1 Descodificador (Decoder):
+\f3\b0  Usado para ativar a linha de escrita do registo correto.\
+\
+\
+\
+
+\f2\b Constru\'e7\'e3o da Unidade de Controlo:\
+\
+
+\f3\b0 \'97 Sinais de Controlo a Definir:\
+\
+\'97> RegWrite (1 bit): Ativa a escrita no Banco de Registos.\
+\'97> OrigAlu (seletor de endere\'e7o, 1 bit): Controla os multiplexadores que escolhem se \'e9 enviado o rd ou o rs1/rs2 para as portas de leitura.\
+\'97> SinalALU (2 bits): Diz \'e0 ALU qual \'e9 a opera\'e7\'e3o matem\'e1tica a fazer (Soma, Passar o Imediato, Produto Escalar, Produto Escalar + Acumula\'e7\'e3o).\
+\
+\'97 Mapeamento do sinal RegWrite:\
+\
+\'97> Como todas as instru\'e7\'f5es guardam um resultado, o RegWrite \'e9 sempre 1.\
+\
+\'97 Mapeamento do sinal OrigAlu:\
+\
+\'97> 0 para li, add e dot; 1 para dota.\
+\'97> O sinal \'e9 1, se o opcode da instru\'e7\'e3o for 11.\
+\
+\'97Mapeamento sinal SinalALU:\
+\
+\'97> Igual ao opcode da instru\'e7\'e3o.\
+\
+\
+
+\f2\b Constru\'e7\'e3o da ALU:
+\f3\b0 \
+\
+\'97 Estrutura Interna:\
+\
+\'97> Blocos de C\'e1lculo Internos.\
+\'97> Sele\'e7\'e3o do Resultado Final e \'93devia\'94 da 
+\f5\i dota
+\f3\i0 .\
+
+\f2\b \
+
+\f3\b0 \'97 Blocos de C\'e1lculo Internos:\
+\
+\'97> Bloco de Passagem: Para a instru\'e7\'e3o li.\
+\'97> Somador Simples (16 bits): Para instru\'e7\'e3o add.\
+\'97> Bloco de Produto Escalar: Para dot e dota \'97 2 multiplicadores de 16 bits e 1 somador de 16 bits\
+\
+\'97 \outl0\strokewidth0 Sele\'e7\'e3o do Resultado Final e \'93devia\'94 da 
+\f5\i dota:\
+\
+\'97> 
+\f3\i0 Como tudo ocorre em paralelo, \'e9 preciso um multiplexador final de 4 para 1 (16 bits) \'97 controlado pelo SinalALU (2 bits) para escolher qual resultado sai da ALU:\
+\
+	\'97> Entrada 00, li \'97 valor do bloco de passagem\
+	\'97> Entrada 01, add \'97 valor do somador simples\
+	\'97> Entrada 10, dot \'97 valor do bloco de produto escalar\
+	\'97> Entrada 11, dota \'97 valor do bloco de produto escalar + acumulador}
